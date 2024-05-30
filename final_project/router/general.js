@@ -22,29 +22,29 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/', function (req, res) {
+public_users.get('/', async function (req, res) {
   //Write your code here
-  new Promise((resolve, reject) => {
     try {
-        resolve(res.send(JSON.stringify(books, null, 4)));
+        res.send(JSON.stringify(books, null, 4));
     } catch(err) {
-        reject(err);
-    }});
+        console.log(err);
+    }
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
-  new Promise((resolve, reject) => {
-    try {
-        const isbn = req.params.isbn;
-        resolve(res.send(books[isbn]));
-    } catch(err) {
-        reject(err);
-    }});
+    new Promise((resolve, reject) => {
+        try {
+            const isbn = req.params.isbn;
+            resolve(res.send(books[isbn]));
+        } catch(err) {
+            reject(err);
+        }
+    });
 //   return res.status(300).json({message: "Yet to be implemented"});
- });
+});
 
 // Get book details based on author
 public_users.get('/author/:author', async function (req, res) {
@@ -67,22 +67,22 @@ public_users.get('/author/:author', async function (req, res) {
 });
 
 // Get all books based on title
-public_users.get('/title/:title', async function (req, res) {
+public_users.get('/title/:title', function (req, res) {
   //Write your code here
-    try {
-        const collection = [];
-        await (()=>{
+    new Promise((resolve, reject) => {
+        try {
+            const collection = [];
             const title = req.params.title;
             for (let [key, obj] of Object.entries(books)) {
                 if (obj.title == title) {
                     collection.push(books[key]);
                 }
             }
-        })();
-        res.send(JSON.stringify(collection, null, 4));
-    } catch(err) {
-        console.log(err);
-    }
+            resolve(res.send(JSON.stringify(collection, null, 4)));
+        } catch(err) {
+            reject(err);
+        }
+    });
 //   return res.status(300).json({message: "Yet to be implemented"});
 });
 
